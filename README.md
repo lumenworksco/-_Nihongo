@@ -1,5 +1,11 @@
 # Nihongo — Japanese Learning PWA
 
+[![Deploy](https://github.com/lumenworksco/Nihongo/actions/workflows/deploy.yml/badge.svg)](https://github.com/lumenworksco/Nihongo/actions/workflows/deploy.yml)
+[![CI](https://github.com/lumenworksco/Nihongo/actions/workflows/ci.yml/badge.svg)](https://github.com/lumenworksco/Nihongo/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**Live app: <https://nihongo.braunf.com>**
+
 A full-featured, offline-first Japanese learning app built as a Progressive Web App. Covers the JLPT N5 curriculum with spaced-repetition flashcards, grammar reference, kana charts, kanji, reading practice, and mock exams.
 
 ## Features
@@ -39,7 +45,7 @@ src/
   data/             # Static JLPT N5 content (vocab, grammar, kana, kanji, ...)
   hooks/            # useProgress (SRS + streak integration)
   lib/
-    srs.ts          # SM2 scheduler
+    srs.ts          # FSRS scheduler (ts-fsrs wrapper)
     storage.ts      # localStorage read/write, streak logic, reconcileStreak
     streakEvents.ts # Cross-component streak event bus
     sync.ts         # Supabase push/pull for streaks and sessions
@@ -60,7 +66,7 @@ supabase/
 
 ```bash
 npm install
-cp .env.local.example .env.local   # fill in Supabase + VAPID keys
+cp .env.example .env.local   # fill in Supabase + VAPID keys
 npm run dev
 ```
 
@@ -79,10 +85,11 @@ npm run build      # outputs to dist/
 npm run preview    # serve the built PWA locally
 ```
 
-### Type check
+### Lint and type check
 
 ```bash
-npx tsc -b
+npm run lint
+npm run typecheck
 ```
 
 ## Supabase Setup
@@ -91,11 +98,11 @@ npx tsc -b
 2. Run `supabase/schema.sql` to create tables and RLS policies.
 3. Run `supabase/migration_fsrs.sql` to add the `fsrs_data` column (needed before deploying the FSRS upgrade).
 4. Run `supabase/cron.sql` (replace `YOUR_SERVICE_ROLE_KEY`) to schedule the hourly push job.
-4. Set Edge Function secrets:
+5. Set Edge Function secrets:
    ```bash
    supabase secrets set VAPID_PUBLIC_KEY=<key> VAPID_PRIVATE_KEY=<key>
    ```
-5. Deploy the Edge Function:
+6. Deploy the Edge Function:
    ```bash
    supabase functions deploy send-push
    ```
@@ -105,6 +112,14 @@ npx tsc -b
 The Edge Function runs hourly. For each user with an active streak who hasn't studied today, it computes their preferred study hour from the last 14 days of sessions and sends a notification only at that exact UTC hour — one notification per user per day. Copy escalates from gentle morning reminders to progressively more urgent late-night warnings. Stale (410 Gone) subscriptions are auto-pruned.
 
 > **iOS note:** Web Push on iOS requires the user to add the app to their home screen and iOS 16.4+.
+
+## Deployment
+
+Pushes to `master` build and deploy to GitHub Pages via `.github/workflows/deploy.yml`. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as repository secrets (and `VITE_VAPID_PUBLIC_KEY` if you use push). The custom domain is set in `public/CNAME`.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
 ## License
 

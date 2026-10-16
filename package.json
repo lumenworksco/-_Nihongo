@@ -1,13 +1,36 @@
 {
   "name": "nihongo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Offline-first Japanese (JLPT N5) learning PWA with FSRS spaced repetition, streaks, mock exams and Supabase sync.",
+  "author": "Florian Braun",
+  "license": "MIT",
+  "homepage": "https://nihongo.braunf.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumenworksco/Nihongo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lumenworksco/Nihongo/issues"
+  },
+  "keywords": [
+    "japanese",
+    "jlpt",
+    "n5",
+    "pwa",
+    "spaced-repetition",
+    "fsrs",
+    "react",
+    "supabase",
+    "vite"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.1",
