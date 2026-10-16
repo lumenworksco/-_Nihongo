@@ -48,6 +48,7 @@ function AppInner() {
     if (authLoading) return;
 
     if (!user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing React state with external auth/storage state
       checkStreakEvent();
       setReady(true);
       return;
@@ -77,6 +78,7 @@ function AppInner() {
         setReady(true);
         setSyncEpoch(e => e + 1);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when the user id changes, not on every user object update
   }, [user?.id, authLoading, checkStreakEvent]);
 
   // Listen for events fired from study sessions on any page

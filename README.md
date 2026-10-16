@@ -90,6 +90,7 @@ npm run preview    # serve the built PWA locally
 ```bash
 npm run lint
 npm run typecheck
+npm test
 ```
 
 ## Supabase Setup

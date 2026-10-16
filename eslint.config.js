@@ -21,12 +21,6 @@ export default defineConfig([
     rules: {
       // Japanese study data intentionally contains ideographic spaces.
       'no-irregular-whitespace': ['error', { skipStrings: true, skipTemplates: true, skipComments: true }],
-      // React Compiler advisory rules: surfaced as warnings, not CI failures.
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/purity': 'warn',
-      'react-hooks/refs': 'warn',
-      'react-hooks/preserve-manual-memoization': 'warn',
-      'react-refresh/only-export-components': 'warn',
     },
   },
 ])

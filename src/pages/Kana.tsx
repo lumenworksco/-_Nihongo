@@ -70,6 +70,7 @@ function KanaDrill({
       if (drillScript === 'katakana' || drillScript === 'both') items.push({ entry: e, script: 'k' });
     }
     for (let i = items.length - 1; i > 0; i--) {
+      // eslint-disable-next-line react-hooks/purity -- drill order is intentionally shuffled
       const j = Math.floor(Math.random() * (i + 1));
       [items[i], items[j]] = [items[j], items[i]];
     }

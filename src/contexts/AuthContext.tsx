@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Separate useEffect for the initial session bootstrap (sets loading=false).
   useEffect(() => {
     if (!supabase) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- no client means no session to wait for
       setLoading(false);
       return;
     }
@@ -107,6 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- hook colocated with its provider
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used inside AuthProvider');

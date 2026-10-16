@@ -53,9 +53,10 @@ export default function StudySession({ queue, onRate, onUndo, onComplete, onBack
   const [done, setDone]             = useState(false);
   const [typedAnswer, setTypedAnswer]       = useState('');
   const [answerResult, setAnswerResult]     = useState<AnswerResult | null>(null);
-  const startTime                   = useRef(Date.now());
+  const [startTime]                 = useState(() => Date.now());
   const localQueueRef               = useRef(localQueue);
   const inputRef                    = useRef<HTMLInputElement>(null);
+  // eslint-disable-next-line react-hooks/refs -- latest-value ref pattern for stable callbacks
   localQueueRef.current = localQueue;
 
   const card      = localQueue[index];
@@ -90,13 +91,13 @@ export default function StudySession({ queue, onRate, onUndo, onComplete, onBack
       if (next >= localQueueRef.current.length) {
         setDone(true);
         const totalRatings = Object.values(newRatings).reduce((a, b) => a + b, 0);
-        onComplete(totalRatings, newRatings, Date.now() - startTime.current);
+        onComplete(totalRatings, newRatings, Date.now() - startTime);
       } else {
         setRevealed(false);
         setIndex(next);
       }
     }
-  }, [done, card, index, onRate, onComplete, ratings]);
+  }, [done, card, index, onRate, onComplete, ratings, startTime]);
 
   const handleUndo = useCallback(() => {
     if (!canUndo) return;
@@ -112,6 +113,7 @@ export default function StudySession({ queue, onRate, onUndo, onComplete, onBack
     setAnswerResult(null);
   }, [canUndo, undoStack, onUndo]);
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization -- deps are intentionally narrower than the compiler infers
   const handleTypedSubmit = useCallback(() => {
     if (revealed) return;
     const result = typedAnswer.trim()
@@ -148,7 +150,8 @@ export default function StudySession({ queue, onRate, onUndo, onComplete, onBack
     const totalRatings = Object.values(ratings).reduce((a, b) => a + b, 0);
     const correct      = ratings.good + ratings.easy;
     const accuracy     = totalRatings > 0 ? Math.round((correct / totalRatings) * 100) : 0;
-    const elapsed      = Math.round((Date.now() - startTime.current) / 1000);
+    // eslint-disable-next-line react-hooks/purity -- elapsed time is only computed once on the final screen
+    const elapsed      = Math.round((Date.now() - startTime) / 1000);
     const timeStr      = elapsed < 60 ? `${elapsed}s` : `${Math.floor(elapsed / 60)}m ${elapsed % 60}s`;
 
     return (

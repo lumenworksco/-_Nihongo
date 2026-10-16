@@ -23,6 +23,7 @@ export default function AuthPage() {
   // Recovery link clicked → switch to new-password form
   useEffect(() => {
     if (recoveryMode) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset form when a recovery link is opened
       setMode('newpassword');
       setError(null);
       setSuccess(null);

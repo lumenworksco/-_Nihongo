@@ -94,6 +94,7 @@ export default function Stats() {
 
   // ── 14-day review forecast ────────────────────────────────────────────────────
   const forecast = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity -- forecast is relative to now
     const now = Date.now();
     const buckets: { label: string; count: number }[] = [];
 
@@ -150,6 +151,7 @@ export default function Stats() {
         if (s.state === 0) counts.new++;
         else if (s.state === 1 || s.state === 3) counts.learning++;
         else if (s.scheduled_days >= 21) counts.known++;
+        // eslint-disable-next-line react-hooks/purity -- status depends on the current time
         else if (Date.now() >= s.due) counts.review++;
         else counts.scheduled++;
       }
