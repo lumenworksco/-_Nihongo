@@ -8,6 +8,8 @@
 
 A full-featured, offline-first Japanese learning app built as a Progressive Web App. Covers the JLPT N5 curriculum with spaced-repetition flashcards, grammar reference, kana charts, kanji, reading practice, and mock exams.
 
+![Nihongo home dashboard](docs/screenshot-home.png)
+
 ## Features
 
 - **Spaced Repetition (SRS)** — FSRS algorithm (via `ts-fsrs`) across Vocabulary (720 words), Grammar (39 points), Particles, Kana (104 characters), and Kanji (83 characters); existing SM2 progress auto-migrates on first load
